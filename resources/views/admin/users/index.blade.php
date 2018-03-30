@@ -1,6 +1,11 @@
 @extends('layouts.admin')
 @section('content')
     <h1 id="admin">User List</h1>
+    @if ($message = Session::get('success'))
+        <div class="alert alert-success">
+            <p>{{ $message }}</p>
+        </div>
+    @endif
     <table class="table table-bordered">
         <thead>
           <tr>
@@ -12,11 +17,11 @@
             <th scope="col">Status</th>
             <th scope="col">Created</th>
             <th scope="col">Updated</th>
-            <th scope="col">Action</th>
+            <th scope="col" width="140px">Action</th>
           </tr>
         </thead>
         <tbody>
-            @if($users)
+      @if($users)
             @foreach ( $users as $user )
           <tr>
             <th scope="row">{{$user->id}}</th>
@@ -37,10 +42,19 @@
               <a href="{{route('admin.users.edit',$user->id)}}" class="btn btn-info btn-sm">
                 <span class="glyphicon glyphicon-user"></span> Edit 
               </a>
+
+              {{ Form::open(['method' => 'DELETE', 'action' => ['AdminUsersController@destroy', $user->id],'style'=>'display:inline']) }}
+              {{ Form::hidden('id', $user->id) }}
+              {{ Form::submit('Delete', ['class' => 'btn btn-danger btn-sm']) }}
+              {{ Form::close() }}
+
             </td>
           </tr>
           @endforeach
          @endif
         </tbody>
       </table>
+      <div class="pagination_item">
+          {!! $users->render() !!}
+      </div>
 @stop

@@ -1,11 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
-
 use App\Http\Requests\UsersRequest;
 use App\Http\Requests\UserEditRequest;
 use App\User;
@@ -19,10 +16,11 @@ class AdminUsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all();
-        return view('admin.users.index',compact('users'));
+        $users = User::orderBy('id','DESC')->paginate(5);
+        return view('admin.users.index',compact('users'))
+        ->with('i', ($request->input('page', 1) - 1) * 5);
     }
 
     /**
@@ -54,7 +52,7 @@ class AdminUsersController extends Controller
         }
         $input['password']= bcrypt($request->password);
         User::create($input);
-        return redirect('/admin/users');
+        return redirect('/admin/users')->with('success','User created successfully');
     }
 
     /**
@@ -107,7 +105,7 @@ class AdminUsersController extends Controller
             $input['photo_id'] = $photo->id;
         }
         $user->update($input);
-        return redirect('/admin/users');   
+        return redirect('/admin/users')->with('success','User updated successfully');;   
     }
 
     /**
@@ -118,6 +116,8 @@ class AdminUsersController extends Controller
      */
     public function destroy($id)
     {
-        //
+         $user = User::findOrFail($id);
+         $user->delete();
+         return redirect('/admin/users')->with('success','User deleted successfully');
     }
 }
