@@ -1,8 +1,6 @@
 @extends('layouts.admin')
 @section('content')
-
-    <h1 id="admin">Create User</h1>
-
+    <h1 class="page-header">Create User</h1>
     @include('includes.form_error')
 
         {!! Form::open(['method' => 'post','action'=>'AdminUsersController@store','files'=>true]) !!}
