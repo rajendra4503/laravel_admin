@@ -1,6 +1,12 @@
 @extends('layouts.admin')
 @section('content')
-<h1 class="page-header">Post List</h1>
+<div class="page-header">Post List</div>
+
+@if ($message = Session::get('success'))
+  <div class="alert alert-success">
+      <p>{{ $message }}</p>
+  </div>
+@endif
 <table class="table table-bordered">
     <thead>
       <tr>
@@ -10,6 +16,8 @@
         <th scope="col">Category</th>
         <th scope="col">Title</th>
         <th scope="col">Body</th>
+        <th scope="col">Created</th>
+        <th scope="col">Updated</th>
         <th scope="col">Action</th>
       </tr>
     </thead>
@@ -23,7 +31,16 @@
         <td>{{$post->category ? $post->category->name : 'Uncategorized'}}</td>
         <td>{{$post->title}}</td>
         <td>{{str_limit($post->body, 30)}}</td>
-        <td>Edit | Delete | View</td>
+        <td>{{ date('Y-m-d H:i:s a',strtotime($post->created_at))}}</td>
+        <td>{{ date('Y-m-d H:i:s a',strtotime($post->updated_at))}}</td>
+        <td><a href="{{route('admin.posts.edit',$post->id)}}" class="btn btn-info btn-sm">
+          <span class="glyphicon glyphicon-user"></span> Edit 
+        </a>
+
+        {{ Form::open(['method' => 'DELETE', 'action' => ['AdminPostsController@destroy', $post->id],'style'=>'display:inline']) }}
+        {{ Form::hidden('id', $post->id) }}
+        {{ Form::submit('Delete', ['class' => 'btn btn-danger btn-sm']) }}
+        {{ Form::close() }}</td>
       </tr>
       @endforeach
     </tbody>

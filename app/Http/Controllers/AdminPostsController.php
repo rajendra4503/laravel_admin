@@ -52,7 +52,7 @@ class AdminPostsController extends Controller
             $input['photo_id']=$photo->id;
         }
         $user->post()->create($input);
-        return redirect('admin/posts');
+        return redirect('admin/posts')->with('success','Post created successfully');
     }
 
     /**
@@ -74,7 +74,9 @@ class AdminPostsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $posts = Post::findOrFail($id);
+        $category = Category::lists('name','id');
+        return view('admin.posts.edit',compact('posts','category'));
     }
 
     /**
@@ -84,9 +86,18 @@ class AdminPostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PostRequest $request, $id)
     {
-        //
+        $post = Post::findOrFail($id);
+        $input = $request->all();
+        if($file = $request->file('file')){
+            $name = time().$file->getClientOriginalName();
+            $file->move('images',$name);
+            $photo = Photo::create(['file'=>$name]);
+            $input['photo_id']=$photo->id;
+        }
+        $post->update($input);
+        return redirect('admin/posts')->with('success','Post Update Successfully');
     }
 
     /**
@@ -97,6 +108,8 @@ class AdminPostsController extends Controller
      */
     public function destroy($id)
     {
-        //
+         $post = Post::findOrFail($id);
+         $post->delete();
+         return redirect('admin/posts')->with('success','Post Delete Successfully');
     }
 }
