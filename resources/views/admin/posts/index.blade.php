@@ -33,7 +33,12 @@
         <td>{{str_limit($post->body, 30)}}</td>
         <td>{{ date('Y-m-d H:i:s a',strtotime($post->created_at))}}</td>
         <td>{{ date('Y-m-d H:i:s a',strtotime($post->updated_at))}}</td>
-        <td><a href="{{route('admin.posts.edit',$post->id)}}" class="btn btn-info btn-sm">
+        <td>
+            <a href="{{route('home.post',$post->id)}}" class="btn btn-info btn-sm">
+                <span class="glyphicon glyphicon-view"></span> view 
+            </a>
+          
+          <a href="{{route('admin.posts.edit',$post->id)}}" class="btn btn-info btn-sm">
           <span class="glyphicon glyphicon-user"></span> Edit 
         </a>
 

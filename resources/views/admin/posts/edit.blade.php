@@ -9,11 +9,9 @@
     @include('includes.form_error')
 
     <div class="col-sm-3">
-        @if($posts->photo_id)
-        <img class="img-responsive img-circle" src="{{$posts->photo->file}}" alt="profile_image">
-        @else
-        No Profile Image
-        @endif
+        
+        <img class="img-responsive img-circle" src="{{$posts->photo ? $posts->photo->file:'http://placehold.it/400x400'}}" alt="profile_image">
+       
     </div>
 
 <div class="col-sm-9">

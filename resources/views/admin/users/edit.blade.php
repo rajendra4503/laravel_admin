@@ -6,11 +6,9 @@
     </div>
 
     <div class="col-sm-3">
-        @if($users->photo_id)
-        <img class="img-responsive img-circle" src="{{$users->photo->file}}" alt="profile_image">
-        @else
-        No Profile Image
-        @endif
+      
+        <img class="img-responsive img-circle" src="{{ $users->photo ? $users->photo->file: 'http://placehold.it/400x400'}}" alt="profile_image">
+       
     </div>
 
 <div class="col-sm-9">
